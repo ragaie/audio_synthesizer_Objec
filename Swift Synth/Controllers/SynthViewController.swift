@@ -11,7 +11,14 @@ class SynthViewController: UIViewController {
 
 		return label
     }()
-        
+        private lazy var playingLabel: UILabel = {
+              let label = UILabel()
+              label.textColor = .white
+              label.text = ""
+              label.translatesAutoresizingMaskIntoConstraints = false
+
+              return label
+          }()
     private lazy var waveformSelectorSegmentedControl: UISegmentedControl = {
         var images = [#imageLiteral(resourceName: "Sine Wave Icon"), #imageLiteral(resourceName: "Triangle Wave Icon"), #imageLiteral(resourceName: "Sawtooth Wave Icon"), #imageLiteral(resourceName: "Square Wave Icon"), #imageLiteral(resourceName: "Noise Wave Icon")]
         images = images.map { $0.resizableImage(withCapInsets: .init(top: 0, left: 10, bottom: 0, right: 10),
@@ -53,11 +60,13 @@ class SynthViewController: UIViewController {
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         setPlaybackStateTo(false)
         parameterLabel.text = "Frequency: 0 Hz  Amplitude: 0%"
+        playingLabel.text = ""
     }
     
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
         setPlaybackStateTo(false)
         parameterLabel.text = "Frequency: 0 Hz  Amplitude: 0%"
+        playingLabel.text = ""
     }
     
     // MARK: Selector Functions
@@ -97,7 +106,7 @@ class SynthViewController: UIViewController {
     }
     
     private func setUpSubviews() {
-        view.add(waveformSelectorSegmentedControl, parameterLabel)
+        view.add(waveformSelectorSegmentedControl, parameterLabel,playingLabel)
         
         NSLayoutConstraint.activate([
             waveformSelectorSegmentedControl.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
@@ -105,7 +114,10 @@ class SynthViewController: UIViewController {
             waveformSelectorSegmentedControl.widthAnchor.constraint(equalToConstant: 250),
             
             parameterLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10),
-            parameterLabel.centerYAnchor.constraint(equalTo: waveformSelectorSegmentedControl.centerYAnchor)
+            parameterLabel.centerYAnchor.constraint(equalTo: waveformSelectorSegmentedControl.centerYAnchor),
+            
+            playingLabel.trailingAnchor.constraint(equalTo: waveformSelectorSegmentedControl.leadingAnchor, constant: -20),
+            playingLabel.centerYAnchor.constraint(equalTo: waveformSelectorSegmentedControl.centerYAnchor)
         ])
     }
     
@@ -117,7 +129,7 @@ class SynthViewController: UIViewController {
         let frequencyHertz = Int(OscillatorObj.frequency())
         parameterLabel.text = "Frequency: \(frequencyHertz) Hz  Amplitude: \(amplitudePercent)%"
 
-
+        playingLabel.text = SynthObj.shared().isPlaying()  == true ? "Playing ..." : ""
         
 //        Oscillator.amplitude = Float((view.bounds.height - coord.y) / view.bounds.height) 
 //        Oscillator.frequency = Float(coord.x / view.bounds.width) * 1014 + 32

@@ -3,23 +3,42 @@
 #import "SynthObj.h"
 
 @implementation SynthObj
-+(SynthObj *)shared{
-    return [[SynthObj alloc]init];
-}
 
+
+static SynthObj *_sharedMySingleton = nil;
+
++(SynthObj *)shared {
+    @synchronized([SynthObj class]) {
+        if (!_sharedMySingleton)
+          _sharedMySingleton = [[SynthObj alloc]init];
+        return _sharedMySingleton;
+    }
+    return nil;
+}
 AVAudioEngine * audioEngine;
 float  timex = 0;
 double  sampleRate;
 float  deltaTime;
-//Signal  signal;
-
+bool isplaying = false;
 - (float )volume{
     return audioEngine.mainMixerNode.outputVolume;
     
 }
--(void)setVolume:(float)volume{
-    [audioEngine.mainMixerNode setOutputVolume:volume];
+- (BOOL)isPlaying{
+    return isplaying;
+
 }
+-(void)setVolume:(float)volume{
+    if (volume == 0 ){
+        isplaying = false;
+    }
+    else{
+        isplaying = true;
+
+    }
+        [audioEngine.mainMixerNode setOutputVolume:volume];
+
+    }
 AVAudioSourceNode * sourceNode;
 typedef float (^Signal)( float);
 Signal signals;
@@ -71,7 +90,7 @@ Signal signals;
     mainMixer.outputVolume = 0;
     NSError *error = nil;
     
-    
+   //isplaying = true;
     if (![audioEngine startAndReturnError:&error]) {
         NSLog(@"engine failed to start: %@", error);
     }

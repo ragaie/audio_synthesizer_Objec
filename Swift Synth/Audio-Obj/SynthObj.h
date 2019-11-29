@@ -10,7 +10,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 +(SynthObj*)shared;
 -(void) setWaveformTo:(Signal) signal ;
-
+- (BOOL)isPlaying;
 @end
 
 NS_ASSUME_NONNULL_END
