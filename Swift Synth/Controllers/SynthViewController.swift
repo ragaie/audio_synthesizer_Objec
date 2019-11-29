@@ -27,10 +27,9 @@ class SynthViewController: UIViewController {
 		
         return segmentedControl
     }()
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
 		setUpView()
         setUpSubviews()
     }
@@ -64,18 +63,32 @@ class SynthViewController: UIViewController {
     // MARK: Selector Functions
     
     @objc private func updateOscillatorWaveform() {
-        let waveform = Waveform(rawValue: waveformSelectorSegmentedControl.selectedSegmentIndex)!
-        switch waveform {
-            case .sine: Synth.shared.setWaveformTo(Oscillator.sine)
-            case .triangle: Synth.shared.setWaveformTo(Oscillator.triangle)
-            case .sawtooth: Synth.shared.setWaveformTo(Oscillator.sawtooth)
-            case .square: Synth.shared.setWaveformTo(Oscillator.square)
-            case .whiteNoise: Synth.shared.setWaveformTo(Oscillator.whiteNoise)
+        
+        let wave =  WaveformObj.init(rawValue: waveformSelectorSegmentedControl.selectedSegmentIndex)
+        switch wave {
+        case .sine: SynthObj.shared().setWaveformTo(OscillatorObj.sine())
+        case .triangle: SynthObj.shared().setWaveformTo(OscillatorObj.triangle())
+            case .sawtooth: SynthObj.shared().setWaveformTo(OscillatorObj.sawtooth())
+            case .square: SynthObj.shared().setWaveformTo(OscillatorObj.square())
+            case .whiteNoise: SynthObj.shared().setWaveformTo(OscillatorObj.whiteNoise())
+        default:
+            break
         }
+        
+//        let waveform = Waveform(rawValue: waveformSelectorSegmentedControl.selectedSegmentIndex)!
+//        switch waveform {
+//            case .sine: Synth.shared.setWaveformTo(Oscillator.sine)
+//            case .triangle: Synth.shared.setWaveformTo(Oscillator.triangle)
+//            case .sawtooth: Synth.shared.setWaveformTo(Oscillator.sawtooth)
+//            case .square: Synth.shared.setWaveformTo(Oscillator.square)
+//            case .whiteNoise: Synth.shared.setWaveformTo(Oscillator.whiteNoise)
+//        }
     }
     
     @objc private func setPlaybackStateTo(_ state: Bool) {
-        Synth.shared.volume = state ? 0.5 : 0
+        SynthObj.shared().volume = state ? 0.5 : 0
+      //  SynthViewController.item.volume = state ? 0.5 : 0
+       // Synth.shared.volume = state ? 0.5 : 0
     }
     
     private func setUpView() {
@@ -97,11 +110,20 @@ class SynthViewController: UIViewController {
     }
     
     private func setSynthParametersFrom(_ coord: CGPoint) {
-        Oscillator.amplitude = Float((view.bounds.height - coord.y) / view.bounds.height) 
-        Oscillator.frequency = Float(coord.x / view.bounds.width) * 1014 + 32
         
-        let amplitudePercent = Int(Oscillator.amplitude * 100)
-        let frequencyHertz = Int(Oscillator.frequency)
+        OscillatorObj.setAmplitude( Float((view.bounds.height - coord.y) / view.bounds.height)  )
+        OscillatorObj.setFrequency(Float(coord.x / view.bounds.width) * 1014 + 32)
+        let amplitudePercent = Int(OscillatorObj.amplitude() * 100)
+        let frequencyHertz = Int(OscillatorObj.frequency())
         parameterLabel.text = "Frequency: \(frequencyHertz) Hz  Amplitude: \(amplitudePercent)%"
+
+
+        
+//        Oscillator.amplitude = Float((view.bounds.height - coord.y) / view.bounds.height) 
+//        Oscillator.frequency = Float(coord.x / view.bounds.width) * 1014 + 32
+//        
+//        let amplitudePercent = Int(Oscillator.amplitude * 100)
+//        let frequencyHertz = Int(Oscillator.frequency)
+//        parameterLabel.text = "Frequency: \(frequencyHertz) Hz  Amplitude: \(amplitudePercent)%"
     }
 }

@@ -21,52 +21,8 @@ float  deltaTime;
     [audioEngine.mainMixerNode setOutputVolume:volume];
 }
 AVAudioSourceNode * sourceNode;
-
-//float (^Signal)( float);
-
-
-
 typedef float (^Signal)( float);
-
 Signal signals;
-
-//let ablPointer = UnsafeMutableAudioBufferListPointer(audioBufferList)
-//
-//       for frame in 0..<Int(frameCount) {
-//           let sampleVal = self.signal(self.time)
-//           self.time += self.deltaTime
-//
-//           for buffer in ablPointer {
-//               let buf: UnsafeMutableBufferPointer<Float> = UnsafeMutableBufferPointer(buffer)
-//               buf[frame] = sampleVal
-//           }
-//       }
-//       return noErr
-
-
-//bufferList = (AudioBufferList *) malloc (
-//                                         sizeof (AudioBufferList) + sizeof (AudioBuffer) * (channelCount - 1)
-//                                         );
-//
-//if (NULL == bufferList) {NSLog (@"*** malloc failure for allocating bufferList memory"); return;}
-//
-//// initialize the mNumberBuffers member
-//bufferList->mNumberBuffers = channelCount;
-//
-//// initialize the mBuffers member to 0
-//AudioBuffer emptyBuffer = {0};
-//size_t arrayIndex;
-//for (arrayIndex = 0; arrayIndex < channelCount; arrayIndex++) {
-//    // set up the AudioBuffer structs in the buffer list
-//    bufferList->mBuffers[arrayIndex] = emptyBuffer;
-//    bufferList->mBuffers[arrayIndex].mNumberChannels  = 1;
-//    // How should mData be initialized???
-//    bufferList->mBuffers[arrayIndex].mData            = malloc(sizeof(AudioUnitSampleType));
-//}
-//
-
-
-
 -(void) inializeNode{
     sourceNode = [[ AVAudioSourceNode alloc] initWithRenderBlock:^OSStatus(BOOL * _Nonnull isSilence, const AudioTimeStamp * _Nonnull timestamp, AVAudioFrameCount frameCount, AudioBufferList * _Nonnull outputData) {
         for (int frame = 0; frame < frameCount ; frame++){
@@ -81,27 +37,6 @@ Signal signals;
         return noErr;
     }];
 }
-
-
-//
-//-(void) inializeNode{
-//    sourceNode = [[ AVAudioSourceNode alloc] initWithRenderBlock:^OSStatus(BOOL * _Nonnull isSilence, const AudioTimeStamp * _Nonnull timestamp, AVAudioFrameCount frameCount, AudioBufferList * _Nonnull outputData) {
-//        for (int frame = 0; frame < frameCount ; frame++){
-//            float sampleVal = signals(timex);
-//            timex += deltaTime;
-//
-//                    for (int bufferr = 0; bufferr < frameCount ; bufferr++){
-//                        Float32 *buffer = (Float32 *)outputData->mBuffers[bufferr].mData;
-//                        buffer[frame] = sampleVal;
-//                    }
-//        }
-//        return noErr;
-//    }];
-//}
-
-
-
-
 - (id)init {
     self = [super init];
     if (self) {
