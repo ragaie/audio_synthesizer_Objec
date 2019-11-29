@@ -5,6 +5,10 @@ import Foundation
 class Synth {
     
     public static let shared = Synth()
+    private var audioEngine: AVAudioEngine
+    private var time: Float = 0
+    private let sampleRate: Double
+    private let deltaTime: Float
     
     public var volume: Float {
         set {
@@ -15,7 +19,6 @@ class Synth {
         }
     }
 
-    private var audioEngine: AVAudioEngine
     private lazy var sourceNode = AVAudioSourceNode { (_, _, frameCount, audioBufferList) -> OSStatus in
         let ablPointer = UnsafeMutableAudioBufferListPointer(audioBufferList)
         
@@ -31,9 +34,7 @@ class Synth {
         return noErr
     }
     
-    private var time: Float = 0
-    private let sampleRate: Double
-    private let deltaTime: Float
+
     
     private var signal: Signal
     

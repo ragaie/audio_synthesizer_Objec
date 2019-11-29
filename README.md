@@ -16,6 +16,16 @@ responsible for creating the sound (with help from `Oscillator.swift`)
 - They must work the same way as their counterpart in Swift
 - Describe (not implement) how you would add the possibility to have 3 voices (synthesizers) at the same time
 
+*this point is easy you just create three of (AVAudioSourceNode) with three different voice 
+*then attach nodes to your audion audioEngine
+    
+   * [audioEngine attachNode:node2];
+   * [audioEngine connect:node2 to:mainMixer format:inputFormat];
+    
+you can create shared Synth object with array of wavForm you need 
+and create node based in array and attch them engine.
+   
+
 ## Bonus
 
 - Write a method in the `Synth.m` resp. `Synth.h` that informs the UI whenever audio is playing

@@ -56,6 +56,7 @@ Signal signals;
         return noErr;
     }];
 }
+
 - (id)init {
     self = [super init];
     if (self) {

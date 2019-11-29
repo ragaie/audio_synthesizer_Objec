@@ -34,7 +34,6 @@ class SynthViewController: UIViewController {
 		
         return segmentedControl
     }()
-    
     override func viewDidLoad() {
         super.viewDidLoad()
 		setUpView()
